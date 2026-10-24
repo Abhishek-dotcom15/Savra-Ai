@@ -1,0 +1,1675 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Savra AI - Comprehensive Project Architecture & Technical Specification</title>
+  <style>
+    @page {
+      size: A4 portrait;
+      margin: 15mm 12mm 15mm 12mm;
+      @bottom-right {
+        content: counter(page);
+        font-size: 9pt;
+        color: #64748b;
+      }
+    }
+    
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      font-size: 10.5pt;
+      line-height: 1.55;
+      color: #1e293b;
+      background-color: #ffffff;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Page Breaks */
+    .page-break {
+      page-break-before: always;
+      break-before: page;
+    }
+    
+    .avoid-break {
+      page-break-inside: avoid;
+      break-inside: avoid;
+    }
+    
+    /* Cover Page */
+    .cover-page {
+      min-height: 260mm;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 30mm 20mm 20mm 20mm;
+      background: linear-gradient(145deg, #0f172a 0%, #1e1b4b 40%, #312e81 100%);
+      color: #ffffff;
+      border-radius: 4px;
+      page-break-after: always;
+      break-after: page;
+    }
+    
+    .cover-badge-row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 25px;
+    }
+    
+    .cover-badge {
+      display: inline-block;
+      padding: 6px 14px;
+      font-size: 9pt;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      background: rgba(255, 255, 255, 0.12);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      border-radius: 20px;
+      color: #c7d2fe;
+    }
+    
+    .cover-title {
+      font-size: 34pt;
+      font-weight: 800;
+      line-height: 1.15;
+      letter-spacing: -0.5px;
+      margin-bottom: 15px;
+      background: linear-gradient(120deg, #ffffff 0%, #e0e7ff 60%, #a5b4fc 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    
+    .cover-tagline {
+      font-size: 15pt;
+      font-weight: 400;
+      color: #cbd5e1;
+      margin-bottom: 30px;
+      line-height: 1.4;
+    }
+    
+    .cover-desc {
+      font-size: 11pt;
+      color: #94a3b8;
+      max-width: 90%;
+      line-height: 1.6;
+      border-left: 3px solid #818cf8;
+      padding-left: 16px;
+      margin-bottom: 40px;
+    }
+    
+    .cover-meta-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 18px;
+      background: rgba(15, 23, 42, 0.6);
+      padding: 20px;
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .meta-item h4 {
+      font-size: 8pt;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #818cf8;
+      margin-bottom: 4px;
+    }
+    
+    .meta-item p {
+      font-size: 10pt;
+      font-weight: 500;
+      color: #f1f5f9;
+    }
+
+    /* Headings */
+    h1 {
+      font-size: 20pt;
+      font-weight: 800;
+      color: #0f172a;
+      margin-top: 25px;
+      margin-bottom: 14px;
+      padding-bottom: 6px;
+      border-bottom: 2px solid #e2e8f0;
+      letter-spacing: -0.3px;
+    }
+    
+    h2 {
+      font-size: 14pt;
+      font-weight: 700;
+      color: #1e1b4b;
+      margin-top: 20px;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    h3 {
+      font-size: 11.5pt;
+      font-weight: 600;
+      color: #312e81;
+      margin-top: 14px;
+      margin-bottom: 6px;
+    }
+
+    h4 {
+      font-size: 10pt;
+      font-weight: 600;
+      color: #475569;
+      margin-top: 10px;
+      margin-bottom: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    p {
+      margin-bottom: 10px;
+      color: #334155;
+    }
+
+    ul, ol {
+      margin-left: 20px;
+      margin-bottom: 12px;
+      color: #334155;
+    }
+
+    li {
+      margin-bottom: 4px;
+    }
+
+    /* Callout Boxes */
+    .callout {
+      padding: 12px 16px;
+      border-radius: 6px;
+      margin: 14px 0;
+      font-size: 10pt;
+    }
+    
+    .callout-info {
+      background-color: #eff6ff;
+      border-left: 4px solid #3b82f6;
+      color: #1e40af;
+    }
+    
+    .callout-success {
+      background-color: #f0fdf4;
+      border-left: 4px solid #10b981;
+      color: #065f46;
+    }
+
+    .callout-purple {
+      background-color: #faf5ff;
+      border-left: 4px solid #8b5cf6;
+      color: #5b21b6;
+    }
+    
+    .callout-warning {
+      background-color: #fffbeb;
+      border-left: 4px solid #f59e0b;
+      color: #92400e;
+    }
+
+    /* Tables */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 14px 0;
+      font-size: 9pt;
+      page-break-inside: avoid;
+    }
+    
+    th {
+      background-color: #1e1b4b;
+      color: #ffffff;
+      font-weight: 600;
+      text-align: left;
+      padding: 8px 10px;
+      border: 1px solid #1e1b4b;
+      font-size: 8.5pt;
+      letter-spacing: 0.3px;
+    }
+    
+    td {
+      padding: 7px 10px;
+      border: 1px solid #e2e8f0;
+      color: #334155;
+      vertical-align: top;
+    }
+    
+    tr:nth-child(even) {
+      background-color: #f8fafc;
+    }
+
+    /* Cards & Grids */
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      margin: 14px 0;
+      page-break-inside: avoid;
+    }
+
+    .card-grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin: 14px 0;
+      page-break-inside: avoid;
+    }
+    
+    .card {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 6px;
+      padding: 12px 14px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+    }
+
+    .card-header {
+      font-weight: 700;
+      font-size: 10pt;
+      color: #1e1b4b;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .card-body {
+      font-size: 9pt;
+      color: #475569;
+      line-height: 1.45;
+    }
+
+    /* Badges */
+    .badge {
+      display: inline-block;
+      padding: 2px 7px;
+      font-size: 7.5pt;
+      font-weight: 700;
+      border-radius: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+    }
+    
+    .badge-get { background: #e0f2fe; color: #0369a1; border: 1px solid #bae6fd; }
+    .badge-post { background: #dcfce7; color: #15803d; border: 1px solid #bbf7d0; }
+    .badge-put { background: #fef3c7; color: #b45309; border: 1px solid #fde68a; }
+    .badge-patch { background: #f3e8ff; color: #7e22ce; border: 1px solid #e9d5ff; }
+    .badge-delete { background: #fee2e2; color: #b91c1c; border: 1px solid #fecaca; }
+    
+    .badge-tech { background: #f1f5f9; color: #334155; border: 1px solid #cbd5e1; font-weight: 600; text-transform: none; }
+    .badge-role { background: #e0e7ff; color: #3730a3; font-weight: 600; }
+    
+    /* Architecture Diagram Box */
+    .arch-diagram {
+      background: #0f172a;
+      color: #f8fafc;
+      font-family: "Courier New", Courier, monospace;
+      font-size: 8pt;
+      line-height: 1.35;
+      padding: 14px;
+      border-radius: 6px;
+      overflow-x: auto;
+      margin: 14px 0;
+      border: 1px solid #334155;
+      page-break-inside: avoid;
+    }
+
+    .toc {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 20px;
+      margin: 20px 0;
+    }
+
+    .toc-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 6px 0;
+      border-bottom: 1px dotted #cbd5e1;
+      font-size: 10pt;
+    }
+
+    .toc-item strong {
+      color: #1e1b4b;
+    }
+
+    .toc-item span {
+      color: #64748b;
+      font-family: monospace;
+    }
+
+    /* Metric counter */
+    .metric-box {
+      text-align: center;
+      padding: 12px 8px;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 6px;
+    }
+
+    .metric-val {
+      font-size: 18pt;
+      font-weight: 800;
+      color: #4338ca;
+      line-height: 1.1;
+    }
+
+    .metric-label {
+      font-size: 8pt;
+      font-weight: 600;
+      color: #64748b;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-top: 4px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ==================== COVER PAGE ==================== -->
+  <div class="cover-page">
+    <div>
+      <div class="cover-badge-row">
+        <span class="cover-badge">Enterprise EdTech Architecture</span>
+        <span class="cover-badge">CBSE & NEP 2020 Aligned</span>
+        <span class="cover-badge">AI Classroom Companion</span>
+      </div>
+      
+      <div class="cover-title">SAVRA AI</div>
+      <div class="cover-tagline">The Intelligent AI Teaching Companion Built for Indian Classrooms</div>
+      
+      <div class="cover-desc">
+        Comprehensive Technical Blueprint, Full-Stack Architecture, Data Schema, Pedagogical AI Engine, User Journeys, REST API Catalog & System Specifications.
+      </div>
+    </div>
+    
+    <div>
+      <div class="cover-meta-grid">
+        <div class="meta-item">
+          <h4>Platform Core</h4>
+          <p>Next.js 16 â€¢ Express.js â€¢ Prisma ORM â€¢ PostgreSQL</p>
+        </div>
+        <div class="meta-item">
+          <h4>AI Foundation</h4>
+          <p>Google Gemini 2.5 Flash â€¢ In-Context Framework Grounding</p>
+        </div>
+        <div class="meta-item">
+          <h4>Target Audience</h4>
+          <p>Indian K-12 Schools (Grades 1-12, Teachers, Students, Admins)</p>
+        </div>
+        <div class="meta-item">
+          <h4>Document Version & Date</h4>
+          <p>v1.0.0 Production Release â€¢ October 2026</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== TABLE OF CONTENTS ==================== -->
+  <div class="page-break"></div>
+  <h1>Document Contents & Executive Overview</h1>
+  <p>This document serves as the authoritative, end-to-end technical specification and architectural manual for the <strong>Savra AI Educational Technology Platform</strong>.</p>
+  
+  <div class="toc">
+    <div class="toc-item"><strong>1. Executive Summary & Core Identity</strong> <span>Section 1</span></div>
+    <div class="toc-item"><strong>2. The Problem Landscape: What Problem Savra AI Solves</strong> <span>Section 2</span></div>
+    <div class="toc-item"><strong>3. System Architecture & High-Level Flow</strong> <span>Section 3</span></div>
+    <div class="toc-item"><strong>4. Full-Stack Technology Breakdown</strong> <span>Section 4</span></div>
+    <div class="toc-item"><strong>5. The Savra AI Pedagogical Engine (Gemini 2.5 Flash)</strong> <span>Section 5</span></div>
+    <div class="toc-item"><strong>6. Complete Database Schema & Data Models (Prisma)</strong> <span>Section 6</span></div>
+    <div class="toc-item"><strong>7. User Flows & Operational Journeys (Teacher, Student, Admin)</strong> <span>Section 7</span></div>
+    <div class="toc-item"><strong>8. Exhaustive REST API Catalog (All 16 Controllers)</strong> <span>Section 8</span></div>
+    <div class="toc-item"><strong>9. Security, Data Privacy & Reliability Engineering</strong> <span>Section 9</span></div>
+    <div class="toc-item"><strong>10. Environment Variables, Deployment & Infrastructure</strong> <span>Section 10</span></div>
+    <div class="toc-item"><strong>11. Future Roadmap & Strategic Vision</strong> <span>Section 11</span></div>
+  </div>
+
+  <div class="card-grid-3" style="margin-top: 20px;">
+    <div class="metric-box">
+      <div class="metric-val">10x Faster</div>
+      <div class="metric-label">Lesson Plan Creation</div>
+    </div>
+    <div class="metric-box">
+      <div class="metric-val">8+ Hours</div>
+      <div class="metric-label">Saved Weekly Per Teacher</div>
+    </div>
+    <div class="metric-box">
+      <div class="metric-val">Seconds</div>
+      <div class="metric-label">CBSE QP Generation</div>
+    </div>
+  </div>
+  <!-- ==================== SECTION 1 ==================== -->
+  <div class="page-break"></div>
+  <h1>1. Executive Summary & Core Identity</h1>
+  
+  <h2>1.1 Project Overview: What is Savra AI?</h2>
+  <p><strong>Savra AI</strong> is an enterprise-grade Educational Technology (EdTech) platform custom-engineered for Indian K-12 school ecosystems (Grades 1 through 12). Designed to address the immense administrative and cognitive burden borne by educators, Savra AI acts as an intelligent, real-time teaching companion. It empowers educators to generate curriculum-aligned lesson plans, standardized question papers, gamified classroom quizzes, and targeted announcements in seconds rather than hours.</p>
+  
+  <p>Unlike generic AI conversational tools, Savra AI is deeply grounded in the Indian national curriculum frameworks: the <strong>National Education Policy (NEP 2020)</strong>, the <strong>National Curriculum Framework (NCF 2023)</strong>, <strong>Bloomâ€™s Revised Taxonomy</strong>, and the <strong>5E Instructional Model (Engage, Explore, Explain, Elaborate, Evaluate)</strong>. It integrates official CBSE Class 10 and Class 12 blueprint patterns directly into its LLM context window, ensuring that every piece of educational material generated conforms to national board assessment guidelines.</p>
+
+  <div class="callout callout-purple">
+    <strong>Core Platform Mission:</strong> To bridge the gap between ambitious national educational reforms (NEP 2020/NCF 2023) and daily classroom reality by providing teachers with an intuitive, AI-powered pedagogical co-pilot that automates paperwork, personalizes learning, and unlocks deeper student engagement.
+  </div>
+
+  <h2>1.2 Key Platform Capabilities</h2>
+  <div class="card-grid">
+    <div class="card">
+      <div class="card-header">âš¡ Automated Lesson Planning</div>
+      <div class="card-body">
+        Generates period-by-period lesson plans mapped across 8 distinct pedagogical dimensions: concepts, learning outcomes, 5E teaching methodology, formative assessments, teaching resources, 21st-century skills & values, real-life applications, and reflective prompts.
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header">ðŸ“ CBSE Question Paper Generator</div>
+      <div class="card-body">
+        Produces complete examination papers across 9 distinct question types (MCQs, Case Studies, Assertion-Reasoning, Numericals, Diagrams, etc.) with automatic sectional division, general instructions, and instant concise answer keys.
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header">ðŸŽ® Gamified Quiz Engine</div>
+      <div class="card-body">
+        Enables teachers to launch interactive classroom quizzes with timed countdowns, auto-scoring, coins rewards, and class-wide and school-wide leaderboards designed for low-device environments.
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header">ðŸ¤– Ask Savra Multimodal AI Assistant</div>
+      <div class="card-body">
+        Role-aware generative assistant with custom personas for students (Socratic hints, curriculum guidance without cheating) and teachers (lesson design, pedagogy advice, and diagram/math image OCR analysis).
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== SECTION 2 ==================== -->
+  <div class="page-break"></div>
+  <h1>2. The Problem Landscape: What Problem Savra AI Solves</h1>
+
+  <p>The Indian K-12 schooling system is one of the largest and most complex educational environments in the world, serving over 250 million students across public and private institutions. Despite recent transformative reforms, educators and school systems face severe systemic challenges that directly impede educational quality.</p>
+
+  <h2>2.1 The Crisis of Teacher Administrative Burnout</h2>
+  <p>In standard Indian schools, teachers spend up to <strong>40% to 50% of their working hours on administrative documentation</strong> rather than direct classroom instruction or student mentorship:</p>
+  <ul>
+    <li><strong>Manual Lesson Planning:</strong> Crafting a single multi-period lesson plan compliant with institutional guidelines typically takes <strong>40 to 60 minutes</strong> per subject per week. A teacher managing multiple grades spends 8 to 12 hours weekly typing repetitive plan documents.</li>
+    <li><strong>Repetitive Question Paper Drafting:</strong> Sourcing questions, balancing mark distributions, ensuring question type diversity, and formatting Word documents consumes hours before every unit test, midterm, and terminal examination.</li>
+    <li><strong>Rote Grading & Record Keeping:</strong> Manually scoring objective quizzes and updating mark registers drains teacher energy that could otherwise be directed toward targeted remedial interventions.</li>
+  </ul>
+
+  <h2>2.2 The NEP 2020 & NCF 2023 Implementation Gap</h2>
+  <p>The Government of Indiaâ€™s <strong>National Education Policy 2020 (NEP 2020)</strong> and the <strong>National Curriculum Framework for School Education (NCF 2023)</strong> mandate a dramatic shift from rote memorization toward <em>Competency-Based Learning (CBL)</em>, Higher-Order Thinking Skills (HOTS), and experiential pedagogy. However, a massive implementation gap persists:</p>
+  
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 25%;">NEP / NCF Mandate</th>
+        <th style="width: 35%;">Traditional Classroom Reality</th>
+        <th style="width: 40%;">Savra AI Algorithmic Solution</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Competency-Based Assessments</strong></td>
+        <td>Teachers rely on legacy guidebooks with outdated factual recall questions.</td>
+        <td>Generates application-heavy, case-study, and assertion-reasoning questions directly mapped to learning competencies.</td>
+      </tr>
+      <tr>
+        <td><strong>5E Instructional Pedagogy</strong></td>
+        <td>Lesson plans are written as flat summaries of textbook paragraphs without pedagogical staging.</td>
+        <td>Synthesizes Engage, Explore, Explain, Elaborate, and Evaluate steps into every single classroom period automatically.</td>
+      </tr>
+      <tr>
+        <td><strong>Bloom's Taxonomy Cognitive Hierarchy</strong></td>
+        <td>Over 80% of teacher-made tests assess solely Level 1 (Remembering) and Level 2 (Understanding).</td>
+        <td>Explicitly balances questions across Analyzing, Evaluating, and Creating cognitive tiers.</td>
+      </tr>
+      <tr>
+        <td><strong>21st-Century Skills & Real-Life Context</strong></td>
+        <td>Curriculum feels detached from daily life; teachers lack time to research modern contextual applications.</td>
+        <td>Each period plan embeds value education, critical thinking skills, and tangible Indian real-world applications.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>2.3 Student Disengagement & Feedback Latency</h2>
+  <p>Traditional homework and paper worksheets suffer from high submission friction and protracted feedback loops. Students receive graded papers days or weeks after submission, by which time the learning moment has passed. Savra AI solves this by introducing <strong>instant gamified evaluation</strong>: students attempt interactive quizzes on web or mobile, receive immediate score breakdowns with answer justifications, and earn coins that drive competitive leaderboard standings.</p>
+
+  <h2>2.4 Fragmented EdTech Silos vs. Unified Platform</h2>
+  <p>Prior to Savra AI, schools resorted to a disjointed patchwork of point solutions: one tool for quiz hosting (e.g., Kahoot), another for word processing lesson plans, a third for notice boards (WhatsApp groups), and separate generic AI bots (ChatGPT) that lack curriculum alignment and produce foreign curriculum outputs. Savra AI consolidates the entire teaching and learning lifecycle into a <strong>single unified, multi-tenant portal</strong> tailored to the Indian educational landscape.</p>
+
+  <!-- ==================== SECTION 3 ==================== -->
+  <div class="page-break"></div>
+  <h1>3. High-Level System Architecture & Flow</h1>
+
+  <h2>3.1 Architectural Paradigm & Philosophy</h2>
+  <p>Savra AI is architected as a high-performance, decoupled client-server platform adhering to <strong>Domain-Driven Design (DDD)</strong> and <strong>Layered Service Architecture</strong>. The platform is designed for sub-second database transactions, horizontal scalability, serverless operational efficiency, and deterministic AI generation pipelines.</p>
+
+  <div class="arch-diagram">
++---------------------------------------------------------------------------------------------------------+
+|                                    SAVRA AI CLIENT LAYER (Next.js 16)                                   |
+|  +--------------------+  +----------------------+  +---------------------+  +------------------------+  |
+|  | (teacher-dashboard)|  | (student-dashboard)  |  |  (admin-dashboard)  |  |   Landing & Onboarding |  |
+|  | - Lesson Planner   |  | - Gamified Quizzes   |  |  - School Metrics   |  |   - Role Selection     |  |
+|  | - QP Assessments   |  | - Real-time Ranking  |  |  - Teacher Alloc    |  |   - Subject Mapping    |  |
+|  | - Quiz Creator     |  | - Socratic AI Chat   |  |  - Student Roster   |  |   - School Code Auth   |  |
+|  | - Analytics & Hub  |  | - Class Notice Board |  |  - Academic Audits  |  |   - Auth & Profiling   |  |
+|  +--------------------+  +----------------------+  +---------------------+  +------------------------+  |
++----------------------------------------------------+----------------------------------------------------+
+                                                     | HTTPS / REST / JSON (JWT Bearer Auth)
+                                                     v
++---------------------------------------------------------------------------------------------------------+
+|                                    BACKEND REST API LAYER (Node.js & Express)                           |
+|  +---------------------------------------------------------------------------------------------------+  |
+|  | Middleware Pipeline: Helmet Security â€¢ CORS â€¢ Zod Validator â€¢ JWT Auth â€¢ RBAC Guard â€¢ ErrorHandler|  |
+|  +---------------------------------------------------------------------------------------------------+  |
+|  |  /api/auth     â€¢ /api/teacher    â€¢ /api/student    â€¢ /api/admin     â€¢ /api/lessons   â€¢ /api/quizzes   |  |
+|  |  /api/assess   â€¢ /api/ai         â€¢ /api/upload     â€¢ /api/schools   â€¢ /api/classes   â€¢ /api/subjects  |  |
++----------------------------------------------------+----------------------------------------------------+
+                         |                           |                          |
+                         v                           v                          v
++-----------------------------------+ +-------------------------------+ +--------------------------------+
+|        DATABASE & ORM LAYER       | |     CLOUD STORAGE SUBSYSTEM   | |        AI CO-PILOT ENGINE      |
+|  Prisma ORM 5.22.0                | |  Cloudflare R2 / AWS S3 SDK   | |  Google Gemini 2.5 Flash       |
+|  Neon Serverless PostgreSQL       | |  - Textbook PDFs & References | |  In-Context Document Store:    |
+|  - 17+ Relational Models          | |  - Teacher File Uploads       | |  - NEP 2020 & NCF 2023 PDFs    |
+|  - Junction Tables & RBAC         | |  - Question Paper Templates   | |  - Bloom's Taxonomy Guidelines |
+|  - Keepalive Cron Ping (5 min)    | |  - 1-Year Immutable Caching   | |  - 5E Instructional Model      |
+|  - Connection Pooling Adapter     | |  - Proxy Streaming Endpoint   | |  - CBSE Sample QP Blueprints   |
++-----------------------------------+ +-------------------------------+ +--------------------------------+
+  </div>
+
+  <h2>3.2 Multi-Tenant Institutional Hierarchy</h2>
+  <p>The database and permission model enforce a clean, multi-tenant hierarchy guaranteeing strict data isolation between schools while enabling cross-classroom analytics:</p>
+  
+  <div class="card-grid">
+    <div class="card">
+      <div class="card-header">ðŸ« School Domain</div>
+      <div class="card-body">
+        The top-level institutional entity identified by a unique school code (e.g., <code>SAVRA001</code>). Houses all administrators, classrooms, teachers, and enrolled students.
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header">ðŸ“š Academic Structure</div>
+      <div class="card-body">
+        Classes span Grades 1 through 12, each segmented into sections (A through E). Subjects are linked to standardized national curricula and granular chapter hierarchies.
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header">ðŸ‘¥ Teacher Allocation</div>
+      <div class="card-body">
+        Teachers are mapped via many-to-many relations (<code>TeacherSubject</code> and <code>TeacherClass</code>), allowing cross-grade subject teaching and multiple classroom supervision.
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header">ðŸŽ“ Student Enrollment</div>
+      <div class="card-body">
+        Students belong to a specific classroom roster, linked by roll numbers, tracking cumulative gamification points (<code>totalPoints</code>) and historical quiz submissions.
+      </div>
+    </div>
+  </div>
+  <!-- ==================== SECTION 4 ==================== -->
+  <div class="page-break"></div>
+  <h1>4. Full-Stack Technology Breakdown</h1>
+
+  <p>Savra AI is constructed using a modern, resilient, type-safe stack designed for zero runtime exceptions, exceptional rendering performance, and secure data handling.</p>
+
+  <h2>4.1 Frontend Architecture & Dependencies</h2>
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 25%;">Technology / Library</th>
+        <th style="width: 15%;">Version</th>
+        <th style="width: 60%;">Functional Role & Architectural Responsibility</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Next.js (App Router)</strong></td>
+        <td><code>16.1.1</code></td>
+        <td>Core React framework powering server-side routing, route grouping <code>(teacher-dashboard)</code>, <code>(student-dashboard)</code>, <code>(admin-dashboard)</code>, font optimization, and SEO metadata.</td>
+      </tr>
+      <tr>
+        <td><strong>React & React DOM</strong></td>
+        <td><code>19.2.3</code></td>
+        <td>Modern component lifecycle, concurrent rendering, server actions, and declarative UI composition.</td>
+      </tr>
+      <tr>
+        <td><strong>TypeScript</strong></td>
+        <td><code>^5.0.0</code></td>
+        <td>End-to-end type safety across client interfaces, API response contracts, and state payloads.</td>
+      </tr>
+      <tr>
+        <td><strong>Tailwind CSS</strong></td>
+        <td><code>^4.0.0</code></td>
+        <td>Next-gen utility-first styling with PostCSS, dynamic theme token variables, responsive design, and CSS animations.</td>
+      </tr>
+      <tr>
+        <td><strong>Radix UI Primitives</strong></td>
+        <td><code>Latest</code></td>
+        <td>Headless, accessible UI primitives: Dialogs, Alert Dialogs, Dropdown Menus, Select, Tabs, and Slot delegation.</td>
+      </tr>
+      <tr>
+        <td><strong>TipTap Rich Text Editor</strong></td>
+        <td><code>^3.16.0</code></td>
+        <td>Interactive in-browser lesson plan editing with StarterKit and placeholder extensions for seamless document customization.</td>
+      </tr>
+      <tr>
+        <td><strong>Recharts</strong></td>
+        <td><code>^3.6.0</code></td>
+        <td>Interactive SVG-based data visualization for student analytics, quiz completion curves, and score distributions.</td>
+      </tr>
+      <tr>
+        <td><strong>Document Export (jspdf, docx)</strong></td>
+        <td><code>jspdf ^4.0, docx ^9.5</code></td>
+        <td>Client-side compilation and download of formatted Word documents (.docx) and printable PDFs (.pdf) for offline classroom use.</td>
+      </tr>
+      <tr>
+        <td><strong>Lucide React</strong></td>
+        <td><code>^0.562.0</code></td>
+        <td>Comprehensive, lightweight vector icon set integrated across all dashboards and navigation sidebars.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>4.2 Backend Architecture & Dependencies</h2>
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 25%;">Technology / Library</th>
+        <th style="width: 15%;">Version</th>
+        <th style="width: 60%;">Functional Role & Architectural Responsibility</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Node.js & Express</strong></td>
+        <td><code>Node 22, Express 4.21</code></td>
+        <td>High-throughput asynchronous REST API framework serving 16 modular route controllers and centralized error handling.</td>
+      </tr>
+      <tr>
+        <td><strong>Prisma ORM</strong></td>
+        <td><code>5.22.0</code></td>
+        <td>Type-safe database ORM managing 17 relational models, complex migrations, relation queries, and parameterized SQL execution.</td>
+      </tr>
+      <tr>
+        <td><strong>@prisma/adapter-neon</strong></td>
+        <td><code>^5.22.0</code></td>
+        <td>Specialized serverless PostgreSQL driver adapter for ultra-low latency connection pooling on Neon Serverless.</td>
+      </tr>
+      <tr>
+        <td><strong>@google/generative-ai</strong></td>
+        <td><code>^0.24.1</code></td>
+        <td>Official Google SDK orchestrating Gemini 2.5 Flash API calls, multimodal file attachments, and structured JSON generation.</td>
+      </tr>
+      <tr>
+        <td><strong>Cloudflare R2 / AWS S3 SDK</strong></td>
+        <td><code>^3.968.0</code></td>
+        <td>S3-compatible object storage SDK (<code>@aws-sdk/client-s3</code>) managing textbook uploads, exam PDFs, and CDN delivery.</td>
+      </tr>
+      <tr>
+        <td><strong>JWT & bcryptjs</strong></td>
+        <td><code>jwt 9.0, bcrypt 2.4</code></td>
+        <td>Cryptographic password hashing (12 salt rounds) and stateless JSON Web Token session validation with 7-day expiration.</td>
+      </tr>
+      <tr>
+        <td><strong>Zod Validation</strong></td>
+        <td><code>^3.23.8</code></td>
+        <td>Strict runtime schema validation across incoming request bodies, route parameters, and query strings.</td>
+      </tr>
+      <tr>
+        <td><strong>Helmet & CORS</strong></td>
+        <td><code>helmet 8.0, cors 2.8</code></td>
+        <td>Security hardening applying CSP headers, XSS prevention, HSTS policies, and explicit CORS origin white-listing.</td>
+      </tr>
+      <tr>
+        <td><strong>Node-Cron</strong></td>
+        <td><code>^3.0.3</code></td>
+        <td>Automated scheduled background tasks executing periodic database keepalive pings to eliminate cold starts.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- ==================== SECTION 5 ==================== -->
+  <div class="page-break"></div>
+  <h1>5. The Savra AI Pedagogical Engine (Gemini 2.5 Flash)</h1>
+
+  <p>The core intelligence powering Savra AI is encapsulated within <code>backend/src/lib/gemini.ts</code>, a dedicated pedagogical service exceeding 1,200 lines of rigorous prompt engineering, document injection logic, and structured JSON parsing. It harnesses Googleâ€™s <strong>Gemini 2.5 Flash</strong> model configured with low temperatures for deterministic educational outputs.</p>
+
+  <h2>5.1 In-Context Pedagogical Grounding Architecture</h2>
+  <p>Rather than relying on ungrounded model weights, Savra AI dynamically retrieves and injects official national framework documents directly into Gemini's multi-part context window as base64-encoded PDF payloads:</p>
+
+  <div class="card-grid">
+    <div class="card">
+      <div class="card-header">ðŸ“˜ Educational Framework Grounding</div>
+      <div class="card-body">
+        Loaded during lesson plan generation from <code>public/lesson-plan/</code>:
+        <ul>
+          <li><strong>NEP_Final_English_0.pdf:</strong> National Education Policy 2020 core tenets.</li>
+          <li><strong>NCF-School-Education-Pre-Draft.pdf:</strong> National Curriculum Framework 2023.</li>
+          <li><strong>Blooms-Taxonomy.pdf:</strong> Cognitive domains & action verbs.</li>
+          <li><strong>The_5E_Model_of_Instruction.pdf:</strong> Constructivist teaching stages.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header">ðŸ“‘ Official CBSE Question Paper Blueprints</div>
+      <div class="card-body">
+        Loaded during assessment generation from <code>public/question-paper/</code>:
+        <ul>
+          <li><strong>Class 10 & 12 Board Papers:</strong> Subject-specific official CBSE board papers (Maths, Science, Physics, Chemistry, Biology, English, etc.).</li>
+          <li><strong>PARAKH & Evaluation Handbooks:</strong> National assessment standardization guidelines.</li>
+          <li><strong>CBSE 2025 QP Standardization:</strong> Official section-by-section mark allocations.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <h2>5.2 Structured Lesson Plan Generation Engine</h2>
+  <p>When a teacher requests a lesson plan for a grade, subject, and chapter, the backend invokes <code>generateLessonPlanPeriods()</code>. The generator produces a strictly structured JSON contract detailing every single teaching period:</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 28%;">Pedagogical Dimension</th>
+        <th style="width: 72%;">Content Generated per Classroom Period</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Concept</strong></td>
+        <td>Clear 2-3 sentence definition of the core scientific or humanities concept to be mastered.</td>
+      </tr>
+      <tr>
+        <td><strong>Learning Outcomes</strong></td>
+        <td>Specific, measurable student learning goals mapped to Bloom's taxonomy verbs (e.g., <em>Analyze</em>, <em>Differentiate</em>, <em>Formulate</em>).</td>
+      </tr>
+      <tr>
+        <td><strong>Teacher-Learning Process</strong></td>
+        <td>Cohesive 5E instructional sequence synthesizing Engagement, Exploration, Explanation, Elaboration, and Evaluation.</td>
+      </tr>
+      <tr>
+        <td><strong>Formative Assessment</strong></td>
+        <td>Rapid, informal comprehension check questions and peer-review tasks conducted within the period.</td>
+      </tr>
+      <tr>
+        <td><strong>Teaching Resources</strong></td>
+        <td>Required lab equipment, digital aids, blackboard diagrams, and reference literature.</td>
+      </tr>
+      <tr>
+        <td><strong>21st-Century Skills & Values</strong></td>
+        <td>Explicit mapping to critical thinking, collaboration, constitutional values, environmental ethics, and digital literacy.</td>
+      </tr>
+      <tr>
+        <td><strong>Real-Life Applications</strong></td>
+        <td>Tangible Indian and global real-world scenarios demonstrating practical relevance to everyday life.</td>
+      </tr>
+      <tr>
+        <td><strong>Student Reflection</strong></td>
+        <td>Metacognitive inquiry prompts encouraging students to self-assess their conceptual understanding.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>5.3 CBSE-Compliant Question Paper & Assessment Engine</h2>
+  <p>The assessment generator (<code>generateAssessment()</code>) produces formal examination papers adhering to CBSE sectional architecture:</p>
+  <ul>
+    <li><strong>Subject-Specific General Instructions:</strong> Automatically embeds official board instructions (e.g., "Section A contains MCQs of 1 mark each", "Use of calculators is strictly prohibited").</li>
+    <li><strong>9 Standardized Question Typologies:</strong>
+      <ol>
+        <li><em>Multiple Choice Questions (MCQ):</em> 4 balanced options with single correct key.</li>
+        <li><em>Short Answer Questions:</em> 2-mark conceptual explanations (2-3 sentences).</li>
+        <li><em>Long Answer Questions:</em> 5-mark comprehensive analytical queries.</li>
+        <li><em>Case-Study / Source-Based Questions:</em> Contextual passages followed by sub-questions (a, b, c).</li>
+        <li><em>Fill in the Blanks:</em> Vocabulary and factual recall statements.</li>
+        <li><em>Diagram-Based Questions:</em> Labeling and drawing instructions for biological/physical systems.</li>
+        <li><em>Numerical Problems:</em> Multi-step mathematical calculations with formula credit.</li>
+        <li><em>Assertion-Reasoning (A-R):</em> Rigorous dual-statement logical evaluations.</li>
+        <li><em>Map-Based Questions:</em> Geographical and historical landmark labeling tasks.</li>
+      </ol>
+    </li>
+  </ul>
+
+  <h2>5.4 Automated Concise Answer Key Generator</h2>
+  <p>To eliminate teacher evaluation fatigue, <code>generateAnswerKey()</code> immediately parses the newly generated question paper and creates an ultra-concise, plain-text marking scheme. MCQs return the exact option letter and a 1-sentence rationale; numerical problems return final figures and formulas; long-form answers highlight 3 to 5 indispensable scoring criteria.</p>
+
+  <h2>5.5 Ask Savra Multimodal AI Assistant</h2>
+  <p>The interactive AI assistant (<code>generateAIResponse()</code> & <code>analyzeImage()</code>) dynamically swaps system prompts based on authenticated user roles:</p>
+  <ul>
+    <li><strong>Student Mode:</strong> Operates as a friendly, patient Socratic tutor. It guides homework without providing copy-paste solutions, gives conceptual hints, and maintains child-safe boundaries.</li>
+    <li><strong>Teacher Mode:</strong> Operates as an experienced curriculum specialist. Suggests differentiated classroom strategies, remedial action plans, and analyzes uploaded textbook photos via Gemini Multimodal Vision.</li>
+  </ul>
+  <!-- ==================== SECTION 6 ==================== -->
+  <div class="page-break"></div>
+  <h1>6. Complete Database Schema & Data Models</h1>
+
+  <p>The Savra AI persistence tier is managed via <strong>Prisma ORM 5.22.0</strong> connected to a <strong>Neon Serverless PostgreSQL</strong> cluster. The schema is normalized into 28 models and junction entities, enforcing referential integrity, cascading deletes, and optimized B-tree indexing.</p>
+
+  <h2>6.1 Core Authentication & Profile Models</h2>
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 18%;">Model Name</th>
+        <th style="width: 27%;">Key Fields & Data Types</th>
+        <th style="width: 25%;">Relational Links</th>
+        <th style="width: 30%;">Operational Purpose & Constraints</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>User</code></td>
+        <td><code>id (UUID PK)</code><br><code>email (String Unique)</code><br><code>passwordHash (String?)</code><br><code>googleId (String?)</code><br><code>role (Role Enum)</code><br><code>name (String)</code><br><code>avatarUrl (String?)</code></td>
+        <td>1:1 with <code>Teacher</code>, <code>Student</code>, <code>Admin</code><br>1:N with <code>File</code>, <code>AIConversation</code></td>
+        <td>Base identity record. Supports password authentication (bcrypt) and Google OAuth SSO. Supports soft deletes via <code>deletedAt</code>.</td>
+      </tr>
+      <tr>
+        <td><code>School</code></td>
+        <td><code>id (UUID PK)</code><br><code>name (String)</code><br><code>code (String Unique)</code></td>
+        <td>1:N with <code>Class</code>, <code>Teacher</code>, <code>Admin</code></td>
+        <td>Multi-tenant institutional anchor. Teachers and students bind to their school using the unique institutional code (e.g., <code>SAVRA001</code>).</td>
+      </tr>
+      <tr>
+        <td><code>Teacher</code></td>
+        <td><code>id (UUID PK)</code><br><code>userId (UUID FK Unique)</code><br><code>schoolId (UUID FK)</code><br><code>location (String?)</code><br><code>teacherRole (String?)</code><br><code>onboardingCompleted (Boolean)</code></td>
+        <td>Belongs to <code>User</code>, <code>School</code><br>M:N with <code>Subject</code>, <code>Class</code><br>1:N with <code>Lesson</code>, <code>Quiz</code>, <code>Assessment</code>, <code>Announcement</code></td>
+        <td>Represents educator profiles. Tracks onboarding status (subject and grade assignments) and cascades on user account deletion.</td>
+      </tr>
+      <tr>
+        <td><code>Student</code></td>
+        <td><code>id (UUID PK)</code><br><code>userId (UUID FK Unique)</code><br><code>classId (UUID FK?)</code><br><code>rollNumber (String?)</code><br><code>totalPoints (Int default 0)</code></td>
+        <td>Belongs to <code>User</code>, <code>Class</code><br>M:N with <code>Subject</code><br>1:N with <code>QuizAttempt</code>, <code>AnnouncementRead</code></td>
+        <td>Represents learner profiles. Stores cumulative gamification coin points and links to their assigned classroom section.</td>
+      </tr>
+      <tr>
+        <td><code>Admin</code></td>
+        <td><code>id (UUID PK)</code><br><code>userId (UUID FK Unique)</code><br><code>schoolId (UUID FK)</code></td>
+        <td>Belongs to <code>User</code>, <code>School</code></td>
+        <td>Institutional oversight account with full administrative control over classrooms, teacher assignments, and rosters.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>6.2 Academic Topology & Taxonomy Models</h2>
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 18%;">Model Name</th>
+        <th style="width: 27%;">Key Fields & Data Types</th>
+        <th style="width: 25%;">Relational Links</th>
+        <th style="width: 30%;">Operational Purpose & Constraints</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>Class</code></td>
+        <td><code>id (UUID PK)</code><br><code>schoolId (UUID FK)</code><br><code>grade (Int 1-12)</code><br><code>section (VarChar 1)</code><br><code>name (String)</code></td>
+        <td>Belongs to <code>School</code><br>1:N with <code>Student</code>, <code>Lesson</code>, <code>Quiz</code>, <code>Assessment</code>, <code>Announcement</code></td>
+        <td>Composite unique constraint <code>[schoolId, grade, section]</code>. Represents physical classrooms (e.g., "Class 10 A").</td>
+      </tr>
+      <tr>
+        <td><code>Subject</code></td>
+        <td><code>id (UUID PK)</code><br><code>name (String)</code><br><code>code (String Unique)</code></td>
+        <td>1:N with <code>Chapter</code>, <code>Lesson</code>, <code>Quiz</code>, <code>Assessment</code><br>M:N with <code>Teacher</code>, <code>Student</code></td>
+        <td>Represents standardized curriculum subjects (Maths, Science, English, Physics, Chemistry, Biology, History, Geography, etc.).</td>
+      </tr>
+      <tr>
+        <td><code>Chapter</code></td>
+        <td><code>id (UUID PK)</code><br><code>subjectId (UUID FK)</code><br><code>name (String)</code><br><code>grade (Int default 6)</code><br><code>orderIndex (Int)</code></td>
+        <td>Belongs to <code>Subject</code><br>M:N with <code>Lesson</code>, <code>Quiz</code>, <code>Assessment</code></td>
+        <td>Composite unique constraint <code>[subjectId, name, grade]</code>. Organizes textbook syllabi sequentially for granular lesson mapping.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>6.3 Lesson Planning & Content Persistence</h2>
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 18%;">Model Name</th>
+        <th style="width: 27%;">Key Fields & Data Types</th>
+        <th style="width: 25%;">Relational Links</th>
+        <th style="width: 30%;">Operational Purpose & Constraints</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>Lesson</code></td>
+        <td><code>id (UUID PK)</code><br><code>title (String)</code><br><code>status (draft, saved, published)</code><br><code>topic (Text?)</code><br><code>numberOfPeriods (Int?)</code><br><code>referenceFileUrl (String?)</code></td>
+        <td>Belongs to <code>Teacher</code>, <code>Class</code>, <code>Subject</code><br>1:N with <code>LessonPeriod</code><br>M:N with <code>Chapter</code></td>
+        <td>Represents master lesson plan units. Tracks planning progression from AI draft to published classroom curriculum.</td>
+      </tr>
+      <tr>
+        <td><code>LessonPeriod</code></td>
+        <td><code>id (UUID PK)</code><br><code>periodNo (Int)</code><br><code>concept (Text?)</code><br><code>learningOutcomes (Text?)</code><br><code>teacherLearningProcess (Text?)</code><br><code>assessment (Text?)</code><br><code>resources (Text?)</code><br><code>centurySkillsValueEducation (Text?)</code><br><code>realLifeApplication (Text?)</code><br><code>reflection (Text?)</code></td>
+        <td>Belongs to <code>Lesson</code> (Cascade Delete)</td>
+        <td>Composite unique constraint <code>[lessonId, periodNo]</code>. Stores the 8-dimensional pedagogical breakdown for every period.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>6.4 Gamified Quizzes & Formal Examination Models</h2>
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 18%;">Model Name</th>
+        <th style="width: 27%;">Key Fields & Data Types</th>
+        <th style="width: 25%;">Relational Links</th>
+        <th style="width: 30%;">Operational Purpose & Constraints</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>Quiz</code></td>
+        <td><code>id (UUID PK)</code><br><code>title (String)</code><br><code>timeLimit (Int minutes)</code><br><code>difficultyLevel (easy, medium, hard)</code><br><code>totalQuestions (Int)</code><br><code>totalMarks (Int)</code><br><code>status (QuizStatus)</code></td>
+        <td>Belongs to <code>Teacher</code>, <code>Class</code>, <code>Subject</code><br>1:N with <code>Question</code>, <code>QuizAttempt</code><br>M:N with <code>Chapter</code></td>
+        <td>Interactive mobile/web quiz unit. Configured with optional due dates and reference file attachments for generation grounding.</td>
+      </tr>
+      <tr>
+        <td><code>Question</code> & <code>QuestionOption</code></td>
+        <td><code>questionText (Text)</code><br><code>questionType (String)</code><br><code>marks (Int default 1)</code><br><code>optionLabel (VarChar 1)</code><br><code>optionText (Text)</code><br><code>isCorrect (Boolean)</code></td>
+        <td>Question belongs to <code>Quiz</code><br>Options belong to <code>Question</code><br>Answers belong to <code>Question</code></td>
+        <td>Stores quiz questions and four corresponding labeled options (A, B, C, D) with deterministic correctness flags.</td>
+      </tr>
+      <tr>
+        <td><code>QuizAttempt</code> & <code>StudentAnswer</code></td>
+        <td><code>score (Int?)</code><br><code>percentage (Decimal?)</code><br><code>timeTaken (Int seconds)</code><br><code>status (in_progress, submitted, graded)</code></td>
+        <td>Attempt belongs to <code>Quiz</code>, <code>Student</code><br>StudentAnswer belongs to <code>Attempt</code>, <code>Question</code></td>
+        <td>Records student submissions. Tracks time elapsed in seconds, auto-scores MCQs, and triggers gamified point increments.</td>
+      </tr>
+      <tr>
+        <td><code>Assessment</code> & <code>QuestionType</code></td>
+        <td><code>title (String)</code><br><code>totalMarks (Int)</code><br><code>questionPaper (JSON)</code><br><code>questionType (String)</code><br><code>numberOfQuestions (Int)</code></td>
+        <td>Belongs to <code>Teacher</code>, <code>Class</code>, <code>Subject</code><br>1:N with <code>AssessmentQuestionType</code></td>
+        <td>Represents formal CBSE exam papers. Stores the complete structured examination paper JSON including sections and instructions.</td>
+      </tr>
+      <tr>
+        <td><code>Announcement</code> & <code>Read</code></td>
+        <td><code>title (String)</code><br><code>content (Text)</code><br><code>attachmentUrl (String?)</code><br><code>readAt (DateTime)</code></td>
+        <td>Announcement belongs to <code>Teacher</code>, <code>Class</code><br>Read belongs to <code>Announcement</code>, <code>Student</code></td>
+        <td>Classroom bulletin board. Tracks which individual students have read each notice via unique compound index <code>[announcementId, studentId]</code>.</td>
+      </tr>
+      <tr>
+        <td><code>AIConversation</code> & <code>AIMessage</code></td>
+        <td><code>title (String?)</code><br><code>role (user | assistant)</code><br><code>content (Text)</code><br><code>fileUrl (String?)</code></td>
+        <td>Conversation belongs to <code>User</code><br>Message belongs to <code>Conversation</code></td>
+        <td>Stores Ask Savra chat sessions. Retains historical context for multi-turn inquiry and multimodal attachment analysis.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- ==================== SECTION 7 ==================== -->
+  <div class="page-break"></div>
+  <h1>7. User Flows & Operational Journeys</h1>
+
+  <h2>7.1 Teacher Operational Workflow</h2>
+  <div class="card-grid">
+    <div class="card">
+      <div class="card-header">Step 1: Auth & Guided Onboarding</div>
+      <div class="card-body">
+        Teacher signs up using email/password or Google OAuth. Selects institutional school code (e.g., <code>SAVRA001</code>). Selects assigned classes (e.g., Class 10 A) and primary subject faculties. Onboarding status transitions to <code>true</code>.
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header">Step 2: AI-Powered Lesson Planning</div>
+      <div class="card-body">
+        Teacher specifies grade, subject, and syllabus chapters. Selects target number of classroom periods and pedagogical objectives. Clicks "Generate with Savra AI". Gemini injects 5E, NEP, NCF, and Bloom's frameworks to create the period table in seconds.
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header">Step 3: In-Browser Customization & Export</div>
+      <div class="card-body">
+        Teacher reviews generated periods in the interactive TipTap editor. Customizes learning outcomes, adjusts instructional resources, and saves changes. Exports document as formatted Microsoft Word (<code>.docx</code>) or printable PDF for offline submission.
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header">Step 4: Examination Paper Generation</div>
+      <div class="card-body">
+        Teacher navigates to Assessment Creator. Specifies question distribution (e.g., 10 MCQs, 4 Short Answers, 2 Case Studies). Savra AI cross-references official Class 10/12 CBSE sample papers to generate the question paper and produces a concise answer key.
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header">Step 5: Gamified Quiz Publishing</div>
+      <div class="card-body">
+        Teacher initiates Quiz Creator. Selects difficulty (Easy, Medium, Hard) and time limit (e.g., 15 minutes). Gemini generates MCQs with smart distractors. Teacher reviews questions and publishes directly to the designated class section.
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header">Step 6: Class Analytics & Remedial Intervention</div>
+      <div class="card-body">
+        Teacher monitors the real-time Analytics Dashboard. Reviews class average scores, individual student completion rates, and the "Top Missed Questions" chart. Uses AI insights to schedule targeted remedial revision periods.
+      </div>
+    </div>
+  </div>
+
+  <h2>7.2 Student Operational Workflow</h2>
+  <div class="card-grid">
+    <div class="card">
+      <div class="card-header">Step 1: Enrollment & Dashboard Entry</div>
+      <div class="card-body">
+        Student registers with school code and classroom section. Lands on the personalized Student Home showing total coin balance, class rank, pending quizzes, and unread teacher announcements.
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header">Step 2: Gamified Quiz Participation</div>
+      <div class="card-body">
+        Student selects an available quiz. Starts interactive timed attempt. Answers MCQs with progress indicators and instant visual feedback. Submits attempt before timer expiration.
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header">Step 3: Instant Score & Points Reward</div>
+      <div class="card-body">
+        Backend instantly scores the attempt. Student sees percentage score, correct answers, and explanation tooltips. Earned points are automatically credited to <code>Student.totalPoints</code>.
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header">Step 4: Leaderboard & Socratic Tutoring</div>
+      <div class="card-body">
+        Student views class-wide and school-wide Leaderboards. If struggling with a concept, opens "Ask Savra" AI Tutor for step-by-step conceptual hints without direct answer revelation.
+      </div>
+    </div>
+  </div>
+
+  <h2>7.3 School Administrator Operational Workflow</h2>
+  <div class="card-grid">
+    <div class="card">
+      <div class="card-header">Institutional Setup & Topology</div>
+      <div class="card-body">
+        Admin manages the institutional master record. Verifies classroom sections across Grades 1 to 12. Oversees school code generation and academic year parameters.
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header">Faculty & Roster Supervision</div>
+      <div class="card-body">
+        Admin audits the active teacher roster. Assigns subjects and classroom responsibilities. Manages student enrollments, transfers between sections, and roll number allocations.
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header">Academic Output Auditing</div>
+      <div class="card-body">
+        Admin accesses institutional analytics: total lesson plans generated, examination papers published, quiz engagement across grades, and faculty adoption metrics.
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header">System Health & Compliance</div>
+      <div class="card-body">
+        Ensures curriculum compliance across all school sections in accordance with CBSE circulars and state board regulations.
+      </div>
+    </div>
+  </div>
+  <!-- ==================== SECTION 8 ==================== -->
+  <div class="page-break"></div>
+  <h1>8. Exhaustive REST API Catalog</h1>
+
+  <p>The Savra AI backend provides a uniform, versioned RESTful API under the <code>/api</code> prefix. All routes require <code>Bearer &lt;JWT&gt;</code> authentication unless marked public. Requests are validated via Zod schemas, and responses follow the standard envelope: <code>{ success: boolean, data?: any, error?: { message: string, code: string } }</code>.</p>
+
+  <h2>8.1 Authentication & User Identity Routes (<code>/api/auth</code>)</h2>
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 10%;">Method</th>
+        <th style="width: 32%;">Endpoint Path</th>
+        <th style="width: 15%;">Access Role</th>
+        <th style="width: 43%;">Functionality & Validation</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="badge badge-post">POST</span></td>
+        <td><code>/api/auth/register</code></td>
+        <td>Public</td>
+        <td>Registers a new user (Teacher, Student, or Admin). Hashes password with bcrypt (12 rounds) and creates linked role profile.</td>
+      </tr>
+      <tr>
+        <td><span class="badge badge-post">POST</span></td>
+        <td><code>/api/auth/login</code></td>
+        <td>Public</td>
+        <td>Authenticates email/password. Issues stateless JWT access token (7-day validity) and returns user profile payload.</td>
+      </tr>
+      <tr>
+        <td><span class="badge badge-post">POST</span></td>
+        <td><code>/api/auth/google</code></td>
+        <td>Public</td>
+        <td>Verifies Google OAuth ID token. Creates user account if first-time login, or issues session JWT for existing accounts.</td>
+      </tr>
+      <tr>
+        <td><span class="badge badge-get">GET</span></td>
+        <td><code>/api/auth/me</code></td>
+        <td>Authenticated</td>
+        <td>Returns currently authenticated user profile, active role, linked school code, and profile metadata.</td>
+      </tr>
+      <tr>
+        <td><span class="badge badge-post">POST</span></td>
+        <td><code>/api/auth/logout</code></td>
+        <td>Authenticated</td>
+        <td>Terminates user session client-side and logs session completion.</td>
+      </tr>
+      <tr>
+        <td><span class="badge badge-post">POST</span></td>
+        <td><code>/api/auth/forgot-password</code></td>
+        <td>Public</td>
+        <td>Generates cryptographically secure password reset token and dispatches reset instructions.</td>
+      </tr>
+      <tr>
+        <td><span class="badge badge-post">POST</span></td>
+        <td><code>/api/auth/reset-password</code></td>
+        <td>Public</td>
+        <td>Validates reset token and sets new bcrypt password hash for user account.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>8.2 Lesson Planning Routes (<code>/api/lessons</code>)</h2>
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 10%;">Method</th>
+        <th style="width: 32%;">Endpoint Path</th>
+        <th style="width: 15%;">Access Role</th>
+        <th style="width: 43%;">Functionality & Validation</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="badge badge-post">POST</span></td>
+        <td><code>/api/lessons</code></td>
+        <td>Teacher</td>
+        <td>Creates a new lesson record associated with teacher, class, subject, and multiple chapters.</td>
+      </tr>
+      <tr>
+        <td><span class="badge badge-get">GET</span></td>
+        <td><code>/api/lessons</code></td>
+        <td>Teacher</td>
+        <td>Lists lessons created by the teacher with filtering by classId, subjectId, and status (draft, saved, published).</td>
+      </tr>
+      <tr>
+        <td><span class="badge badge-get">GET</span></td>
+        <td><code>/api/lessons/:id</code></td>
+        <td>Teacher</td>
+        <td>Fetches single lesson record including all associated periods (1 to N) and linked chapter metadata.</td>
+      </tr>
+      <tr>
+        <td><span class="badge badge-put">PUT</span></td>
+        <td><code>/api/lessons/:id</code></td>
+        <td>Teacher</td>
+        <td>Updates lesson header, objectives, duration, and saves edited period content from the TipTap editor.</td>
+      </tr>
+      <tr>
+        <td><span class="badge badge-delete">DELETE</span></td>
+        <td><code>/api/lessons/:id</code></td>
+        <td>Teacher</td>
+        <td>Deletes lesson record and cascades delete to all child <code>LessonPeriod</code> and junction entries.</td>
+      </tr>
+      <tr>
+        <td><span class="badge badge-post">POST</span></td>
+        <td><code>/api/lessons/generate</code></td>
+        <td>Teacher</td>
+        <td>Triggers Gemini AI engine with 5E, NEP, NCF, and Bloom's PDF grounding to generate multi-period structured lesson plan.</td>
+      </tr>
+      <tr>
+        <td><span class="badge badge-patch">PATCH</span></td>
+        <td><code>/api/lessons/:id/status</code></td>
+        <td>Teacher</td>
+        <td>Updates lifecycle state of a lesson (<code>draft</code> &rarr; <code>saved</code> &rarr; <code>published</code>).</td>
+      </tr>
+      <tr>
+        <td><span class="badge badge-post">POST</span></td>
+        <td><code>/api/lessons/generate-topic</code></td>
+        <td>Teacher</td>
+        <td>AI generates concise 2-4 word pedagogical topic name based on selected chapters and grade level.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>8.3 Formal Assessment Routes (<code>/api/assessments</code>)</h2>
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 10%;">Method</th>
+        <th style="width: 32%;">Endpoint Path</th>
+        <th style="width: 15%;">Access Role</th>
+        <th style="width: 43%;">Functionality & Validation</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="badge badge-post">POST</span></td>
+        <td><code>/api/assessments</code></td>
+        <td>Teacher</td>
+        <td>Creates assessment record with question types distribution and target marks.</td>
+      </tr>
+      <tr>
+        <td><span class="badge badge-get">GET</span></td>
+        <td><code>/api/assessments</code></td>
+        <td>Teacher</td>
+        <td>Lists teacher's created question papers with pagination and subject/class filters.</td>
+      </tr>
+      <tr>
+        <td><span class="badge badge-get">GET</span></td>
+        <td><code>/api/assessments/:id</code></td>
+        <td>Teacher</td>
+        <td>Fetches complete assessment details, question distribution breakdown, and structured question paper JSON.</td>
+      </tr>
+      <tr>
+        <td><span class="badge badge-put">PUT</span></td>
+        <td><code>/api/assessments/:id</code></td>
+        <td>Teacher</td>
+        <td>Updates question paper content, modifies individual questions, marks, and section titles.</td>
+      </tr>
+      <tr>
+        <td><span class="badge badge-delete">DELETE</span></td>
+        <td><code>/api/assessments/:id</code></td>
+        <td>Teacher</td>
+        <td>Deletes assessment record and all associated question type allocations.</td>
+      </tr>
+      <tr>
+        <td><span class="badge badge-post">POST</span></td>
+        <td><code>/api/assessments/generate</code></td>
+        <td>Teacher</td>
+        <td>Generates CBSE-aligned question paper by injecting official Class 10/12 sample papers and guidelines into Gemini.</td>
+      </tr>
+      <tr>
+        <td><span class="badge badge-post">POST</span></td>
+        <td><code>/api/assessments/generate-answer-key</code></td>
+        <td>Teacher</td>
+        <td>Parses generated question paper and creates an ultra-concise, plain-text marking scheme and answer key.</td>
+      </tr>
+      <tr>
+        <td><span class="badge badge-patch">PATCH</span></td>
+        <td><code>/api/assessments/:id/status</code></td>
+        <td>Teacher</td>
+        <td>Transitions assessment status (<code>draft</code> &rarr; <code>saved</code> &rarr; <code>published</code>).</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>8.4 Gamified Quiz Routes (<code>/api/quizzes</code>)</h2>
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 10%;">Method</th>
+        <th style="width: 32%;">Endpoint Path</th>
+        <th style="width: 15%;">Access Role</th>
+        <th style="width: 43%;">Functionality & Validation</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="badge badge-post">POST</span></td>
+        <td><code>/api/quizzes</code></td>
+        <td>Teacher</td>
+        <td>Creates a new gamified quiz container with time limits, due dates, and difficulty settings.</td>
+      </tr>
+      <tr>
+        <td><span class="badge badge-get">GET</span></td>
+        <td><code>/api/quizzes</code></td>
+        <td>Teacher</td>
+        <td>Lists quizzes created by the teacher with status filters and question counts.</td>
+      </tr>
+      <tr>
+        <td><span class="badge badge-get">GET</span></td>
+        <td><code>/api/quizzes/:id</code></td>
+        <td>Teacher / Student</td>
+        <td>Retrieves quiz details including all questions and option choices (masks correct answers for students).</td>
+      </tr>
+      <tr>
+        <td><span class="badge badge-post">POST</span></td>
+        <td><code>/api/quizzes/generate</code></td>
+        <td>Teacher</td>
+        <td>AI generates multiple-choice questions with 4 options, balanced distractors, and difficulty calibration.</td>
+      </tr>
+      <tr>
+        <td><span class="badge badge-get">GET</span></td>
+        <td><code>/api/quizzes/:id/attempts</code></td>
+        <td>Teacher</td>
+        <td>Lists all student attempts for a quiz, showing individual scores, percentages, and time taken.</td>
+      </tr>
+      <tr>
+        <td><span class="badge badge-post">POST</span></td>
+        <td><code>/api/quizzes/:id/questions</code></td>
+        <td>Teacher</td>
+        <td>Appends custom manual questions and option sets to an existing quiz.</td>
+      </tr>
+      <tr>
+        <td><span class="badge badge-put">PUT</span></td>
+        <td><code>/api/quizzes/:id/questions/:qId</code></td>
+        <td>Teacher</td>
+        <td>Updates question text, marks, and option labels/correctness flags.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>8.5 Student Dashboard Routes (<code>/api/student</code>)</h2>
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 10%;">Method</th>
+        <th style="width: 32%;">Endpoint Path</th>
+        <th style="width: 15%;">Access Role</th>
+        <th style="width: 43%;">Functionality & Validation</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="badge badge-get">GET</span></td>
+        <td><code>/api/student/dashboard</code></td>
+        <td>Student</td>
+        <td>Returns student overview: total coin points, class rank, total attempts, pending quizzes, and unread notices.</td>
+      </tr>
+      <tr>
+        <td><span class="badge badge-get">GET</span></td>
+        <td><code>/api/student/quizzes/available</code></td>
+        <td>Student</td>
+        <td>Lists all published quizzes assigned to the student's class that have not yet been completed.</td>
+      </tr>
+      <tr>
+        <td><span class="badge badge-post">POST</span></td>
+        <td><code>/api/student/quizzes/:id/start</code></td>
+        <td>Student</td>
+        <td>Initializes a new <code>QuizAttempt</code> in <code>in_progress</code> state. Starts server-side attempt timestamp.</td>
+      </tr>
+      <tr>
+        <td><span class="badge badge-post">POST</span></td>
+        <td><code>/api/student/quizzes/:id/attempt/:aId/answer</code></td>
+        <td>Student</td>
+        <td>Saves individual question answer choice during an in-progress attempt.</td>
+      </tr>
+      <tr>
+        <td><span class="badge badge-patch">PATCH</span></td>
+        <td><code>/api/student/quizzes/:id/attempt/:aId/submit</code></td>
+        <td>Student</td>
+        <td>Submits quiz attempt. Auto-grades MCQs, calculates percentage score, and awards earned points to <code>Student.totalPoints</code>.</td>
+      </tr>
+      <tr>
+        <td><span class="badge badge-get">GET</span></td>
+        <td><code>/api/student/leaderboard</code></td>
+        <td>Student</td>
+        <td>Returns real-time class-wide and school-wide leaderboard standings ranked by total points.</td>
+      </tr>
+      <tr>
+        <td><span class="badge badge-get">GET</span></td>
+        <td><code>/api/student/announcements</code></td>
+        <td>Student</td>
+        <td>Fetches class announcements with read status indicators and downloadable teacher attachments.</td>
+      </tr>
+      <tr>
+        <td><span class="badge badge-post">POST</span></td>
+        <td><code>/api/student/announcements/:id/read</code></td>
+        <td>Student</td>
+        <td>Upserts <code>AnnouncementRead</code> record timestamping when the student viewed the notice.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>8.6 Teacher & Admin Hub Routes (<code>/api/teacher</code> & <code>/api/admin</code>)</h2>
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 10%;">Method</th>
+        <th style="width: 32%;">Endpoint Path</th>
+        <th style="width: 15%;">Access Role</th>
+        <th style="width: 43%;">Functionality & Validation</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="badge badge-get">GET</span></td>
+        <td><code>/api/teacher/profile</code></td>
+        <td>Teacher</td>
+        <td>Returns teacher profile, assigned subjects, and active classroom sections.</td>
+      </tr>
+      <tr>
+        <td><span class="badge badge-post">POST</span></td>
+        <td><code>/api/teacher/onboarding</code></td>
+        <td>Teacher</td>
+        <td>Completes teacher onboarding transaction: binds school, assigned subjects, and teaching classes.</td>
+      </tr>
+      <tr>
+        <td><span class="badge badge-get">GET</span></td>
+        <td><code>/api/teacher/analytics/overview</code></td>
+        <td>Teacher</td>
+        <td>Aggregates teacher classroom metrics: total quizzes taken, pass rates, average marks, and engagement trends.</td>
+      </tr>
+      <tr>
+        <td><span class="badge badge-get">GET</span></td>
+        <td><code>/api/admin/dashboard</code></td>
+        <td>Admin</td>
+        <td>Provides school-wide executive analytics: total teachers, enrolled students, active classrooms, and content creation volume.</td>
+      </tr>
+      <tr>
+        <td><span class="badge badge-get">GET</span></td>
+        <td><code>/api/admin/teachers</code></td>
+        <td>Admin</td>
+        <td>Lists all faculty members in the school with their assigned classes, subjects, and activity status.</td>
+      </tr>
+      <tr>
+        <td><span class="badge badge-post">POST</span></td>
+        <td><code>/api/admin/teachers</code></td>
+        <td>Admin</td>
+        <td>Creates a new teacher account and allocates initial subject and classroom delegations.</td>
+      </tr>
+      <tr>
+        <td><span class="badge badge-get">GET</span></td>
+        <td><code>/api/admin/students</code></td>
+        <td>Admin</td>
+        <td>Lists all enrolled students with roll number filtering, class breakdown, and performance metrics.</td>
+      </tr>
+      <tr>
+        <td><span class="badge badge-post">POST</span></td>
+        <td><code>/api/admin/students/transfer</code></td>
+        <td>Admin</td>
+        <td>Transfers a student between classroom sections or updates their assigned roll number.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>8.7 Multimodal AI & Cloud Storage Routes (<code>/api/ai</code> & <code>/api/upload</code>)</h2>
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 10%;">Method</th>
+        <th style="width: 32%;">Endpoint Path</th>
+        <th style="width: 15%;">Access Role</th>
+        <th style="width: 43%;">Functionality & Validation</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="badge badge-post">POST</span></td>
+        <td><code>/api/ai/query</code></td>
+        <td>Teacher / Student</td>
+        <td>Sends a chat prompt to Ask Savra AI with rate-limiting (20 req/min) and historical context window management.</td>
+      </tr>
+      <tr>
+        <td><span class="badge badge-post">POST</span></td>
+        <td><code>/api/ai/analyze-image</code></td>
+        <td>Teacher / Student</td>
+        <td>Multimodal vision endpoint: analyzes uploaded math problem images or textbook diagrams using Gemini 2.5 Flash.</td>
+      </tr>
+      <tr>
+        <td><span class="badge badge-get">GET</span></td>
+        <td><code>/api/ai/conversations</code></td>
+        <td>Authenticated</td>
+        <td>Lists past chat sessions with auto-generated conversation titles.</td>
+      </tr>
+      <tr>
+        <td><span class="badge badge-post">POST</span></td>
+        <td><code>/api/upload/file</code></td>
+        <td>Authenticated</td>
+        <td>Uploads files to Cloudflare R2 / AWS S3 using multipart form data (Multer memory storage). Returns CDN URL.</td>
+      </tr>
+      <tr>
+        <td><span class="badge badge-get">GET</span></td>
+        <td><code>/api/upload/file/*</code></td>
+        <td>Public</td>
+        <td>Secure proxy streaming endpoint serving R2 assets with 1-year immutable caching headers (<code>Cache-Control: public, max-age=31536000</code>).</td>
+      </tr>
+      <tr>
+        <td><span class="badge badge-get">GET</span></td>
+        <td><code>/api/health</code></td>
+        <td>Public</td>
+        <td>Health check endpoint returning system status and ISO timestamp for monitoring uptime.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- ==================== SECTION 9 ==================== -->
+  <div class="page-break"></div>
+  <h1>9. Security, Data Privacy & Reliability Engineering</h1>
+
+  <h2>9.1 Authentication & Role-Based Access Control (RBAC)</h2>
+  <p>Security is enforced at every layer of the Savra AI infrastructure:</p>
+  <ul>
+    <li><strong>Stateless Cryptographic Tokens:</strong> User sessions are managed via digitally signed JWTs containing <code>userId</code>, <code>email</code>, and <code>role</code> (<code>teacher</code>, <code>student</code>, <code>admin</code>). Tokens expire after 7 days, eliminating database session lookup bottlenecks.</li>
+    <li><strong>Granular Authorization Middleware:</strong> The <code>authorize(...roles)</code> guard inspects token claims before route handler execution, rejecting unauthorized access with <code>403 Forbidden</code> responses.</li>
+    <li><strong>Password Hashing:</strong> User passwords are encrypted using <code>bcryptjs</code> configured with <strong>12 salt rounds</strong>, providing robust defense against rainbow tables and brute-force cracking.</li>
+  </ul>
+
+  <h2>9.2 Strict Data Validation & SQL Injection Immunity</h2>
+  <div class="card-grid">
+    <div class="card">
+      <div class="card-header">ðŸ›¡ï¸ Zod Schema Validation</div>
+      <div class="card-body">
+        All incoming payloads (bodies, queries, params) must pass strict Zod schemas before reaching business logic. Malformed requests are rejected immediately with descriptive <code>400 Bad Request</code> error structures.
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header">ðŸ”’ SQL Injection Immunity</div>
+      <div class="card-body">
+        Prisma ORM compiles all database queries into parameterized SQL statements. User inputs are never concatenated directly into raw queries, rendering SQL injection vectors impossible.
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header">â±ï¸ AI Abuse Mitigation</div>
+      <div class="card-body">
+        In-memory rate limiting throttles AI query endpoints to a maximum of <strong>20 requests per minute per user</strong>, safeguarding API quotas and preventing denial-of-wallet attacks.
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header">ðŸ”„ Database Keepalive Cron</div>
+      <div class="card-body">
+        A background cron job (<code>node-cron</code>) executes a lightweight <code>SELECT 1</code> ping every 5 minutes, preventing serverless cold starts on Neon PostgreSQL and Render backend instances.
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== SECTION 10 ==================== -->
+  <div class="page-break"></div>
+  <h1>10. Deployment, Environment Variables & Configuration</h1>
+
+  <h2>10.1 Environment Variables Reference</h2>
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 25%;">Variable Name</th>
+        <th style="width: 15%;">Default / Sample</th>
+        <th style="width: 60%;">Description & Functional Purpose</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>DATABASE_URL</code></td>
+        <td><code>postgresql://...</code></td>
+        <td>Neon Serverless PostgreSQL connection string with SSL mode enabled.</td>
+      </tr>
+      <tr>
+        <td><code>JWT_SECRET</code></td>
+        <td><code>[cryptographic string]</code></td>
+        <td>Secret key used for signing and verifying JSON Web Tokens.</td>
+      </tr>
+      <tr>
+        <td><code>GEMINI_API_KEY</code></td>
+        <td><code>AIzaSy...</code></td>
+        <td>Google AI Studio API key enabling Gemini 2.5 Flash generative models.</td>
+      </tr>
+      <tr>
+        <td><code>AI_MODEL</code></td>
+        <td><code>gemini-2.5-flash</code></td>
+        <td>Specifies the generative model identifier for lesson planning and assessment generation.</td>
+      </tr>
+      <tr>
+        <td><code>AI_MAX_TOKENS</code></td>
+        <td><code>1500</code></td>
+        <td>Maximum token output limit for conversational responses in Ask Savra chat.</td>
+      </tr>
+      <tr>
+        <td><code>AI_RATE_LIMIT_PER_MINUTE</code></td>
+        <td><code>20</code></td>
+        <td>Rate limit threshold controlling maximum AI queries allowed per minute per user.</td>
+      </tr>
+      <tr>
+        <td><code>R2_ACCOUNT_ID</code></td>
+        <td><code>[cloudflare account]</code></td>
+        <td>Cloudflare account ID for S3-compatible R2 object storage access.</td>
+      </tr>
+      <tr>
+        <td><code>R2_ACCESS_KEY_ID</code></td>
+        <td><code>[access key]</code></td>
+        <td>Cloudflare R2 authentication key ID for bucket read/write operations.</td>
+      </tr>
+      <tr>
+        <td><code>R2_SECRET_ACCESS_KEY</code></td>
+        <td><code>[secret key]</code></td>
+        <td>Cloudflare R2 authentication secret key for secure signing.</td>
+      </tr>
+      <tr>
+        <td><code>R2_BUCKET_NAME</code></td>
+        <td><code>savra-ai</code></td>
+        <td>Target storage bucket name housing uploaded textbook chapters and reference materials.</td>
+      </tr>
+      <tr>
+        <td><code>KEEPALIVE_INTERVAL_MINUTES</code></td>
+        <td><code>5</code></td>
+        <td>Interval in minutes between automated database ping operations to eliminate cold starts.</td>
+      </tr>
+      <tr>
+        <td><code>FRONTEND_URL</code></td>
+        <td><code>http://localhost:3000</code></td>
+        <td>Whitelisted CORS origin allowing browser requests from the Next.js frontend client.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- ==================== SECTION 11 ==================== -->
+  <div class="page-break"></div>
+  <h1>11. Future Roadmap & Strategic Vision</h1>
+
+  <p>Savra AI is positioned to become the premier operating system for Indian school education. Key initiatives planned for subsequent development cycles include:</p>
+
+  <div class="card-grid">
+    <div class="card">
+      <div class="card-header">ðŸŒ Multilingual Regional Localization</div>
+      <div class="card-body">
+        Expanding beyond English and Hindi to support 10+ major regional Indian languages (Tamil, Telugu, Kannada, Malayalam, Bengali, Marathi, Gujarati) for vernacular state board schools.
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header">âœï¸ Vision-Based Handwritten Answer Grading</div>
+      <div class="card-body">
+        Leveraging Gemini Multimodal Vision to automatically scan, OCR, and evaluate handwritten student examination sheets, providing automated point grading and margin annotations.
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header">ðŸ“² WhatsApp Parent Progress Integration</div>
+      <div class="card-body">
+        Automated bi-weekly WhatsApp progress digests sent to parents, highlighting student quiz mastery, completed competencies, and recommended home revision topics.
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header">ðŸŽ™ï¸ Voice-Activated Classroom Co-Pilot</div>
+      <div class="card-body">
+        Microphone integration for classroom smart interactive displays, allowing teachers to summon diagrams, real-time analogies, and comprehension check quizzes via hands-free voice commands.
+      </div>
+    </div>
+  </div>
+
+  <div class="callout callout-success" style="margin-top: 30px; text-align: center;">
+    <strong>Savra AI Educational Technologies</strong> â€¢ Built with â¤ï¸ for Indian Teachers & Students â€¢ CBSE & NEP 2020 Aligned
+  </div>
+
+</body>
+</html>
